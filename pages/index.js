@@ -4,30 +4,31 @@ import styles from "../styles/Home.module.css";
 import { useState } from "react";
 
 export default function Home() {
-  // TODO Create a `todoList` React state hook and initialize to an empty array
   const [item, setItem] = useState("");
+  const [todoList, setTodoList] = useState([]);
 
   function handleChange(event) {
-    // TODO Implement the handle change function
-    // It should set the item to the value in the input field
+    setItem(event.target.value);
   }
 
   function onClick(event) {
     event.preventDefault();
-    // TODO implement the on click function
-    // It should add the current to the todo list
-    // HINT: to get access to the current state to modify it,
-    // you can use the syntax defined two lines below, where we assume
-    // const [example, setExample] = useState(0) is a state hook
-    // setExampe((currentExample) => currentExample + 1);
+    // avoid adding empty items to todoList
+    if (item != "") {
+      // clearing the input
+      setItem("");
+      // creating a clone of our todoList not to modify objects on the state directly
+      const updatedTodoList = todoList.slice(0);
+      updatedTodoList.push(item);
+      setTodoList(updatedTodoList);
+    }
   }
 
-  // TODO Delete this line and uncomment the lines below
-  // const listItems = todoList.map((listItem, index) => (
-  //   <li key={index} className="list-group-item">
-  //     {listItem}
-  //   </li>
-  // ));
+  const listItems = todoList.map((listItem, index) => (
+    <li key={index} className="list-group-item">
+      {listItem}
+    </li>
+  ));
 
   return (
     <div className={styles.container}>
@@ -68,9 +69,7 @@ export default function Home() {
             <div className="col-2">
               <button
                 aria-label="submit-button"
-                // TODO Add the `btn-danger` class to the className
-                // This will make the button red as expected.
-                className="btn"
+                className="btn btn-danger"
                 onClick={onClick}
               >
                 Submit
@@ -79,10 +78,7 @@ export default function Home() {
           </form>
         </div>
 
-        <div className="list-group">
-          {/* TODO Delete this line and uncomment the line below */}
-          {/* {listItems} */}
-        </div>
+        <div className="list-group">{listItems}</div>
       </main>
 
       <footer className={styles.footer}>
